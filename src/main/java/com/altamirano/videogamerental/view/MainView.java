@@ -15,6 +15,34 @@ public class MainView extends javax.swing.JFrame {
      */
     public MainView() {
         initComponents();
+
+        setSize(1000, 650);
+        setLocationRelativeTo(null);
+
+        /**
+         * Iniciamos los paneles de Inicio,Juegos,User y Alquileres
+         */
+        PanelInicio panelInicio = new PanelInicio();
+        PanelGames panelGames = new PanelGames();
+        PanelUsers panelUsers = new PanelUsers();
+        PanelRentals panelRentals = new PanelRentals();
+
+        /**
+         * Añadimos las pantallas al mainPanel con sus identificadores
+         * "inicio/games/users/rentals"
+         */
+        mainPanel.add(panelInicio, "Inicio");
+        mainPanel.add(panelGames, "Games");
+        mainPanel.add(panelUsers, "Users");
+        mainPanel.add(panelRentals, "Rentals");
+
+        /**
+         * Mostramos el panel inicial
+         *
+         */
+        java.awt.CardLayout c1 = (java.awt.CardLayout) mainPanel.getLayout();
+        c1.show(mainPanel, "Inicio");
+
     }
 
     /**
@@ -26,21 +54,119 @@ public class MainView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        mainPanel = new javax.swing.JPanel();
+        menuBarMain = new javax.swing.JMenuBar();
+        menuMain = new javax.swing.JMenu();
+        menuUser = new javax.swing.JMenu();
+        menuGame = new javax.swing.JMenu();
+        menuRental = new javax.swing.JMenu();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("VideoGameRental");
+        setSize(new java.awt.Dimension(1000, 650));
+
+        mainPanel.setLayout(new java.awt.CardLayout());
+
+        menuMain.setText("Inicio");
+        menuMain.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuMainMouseClicked(evt);
+            }
+        });
+        menuBarMain.add(menuMain);
+
+        menuUser.setText("Usuarios");
+        menuUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuUserMouseClicked(evt);
+            }
+        });
+        menuUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuUserActionPerformed(evt);
+            }
+        });
+        menuBarMain.add(menuUser);
+
+        menuGame.setText("Juegos");
+        menuGame.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuGameMouseClicked(evt);
+            }
+        });
+        menuGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuGameActionPerformed(evt);
+            }
+        });
+        menuBarMain.add(menuGame);
+
+        menuRental.setText("Alquileres");
+        menuRental.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuRentalMouseClicked(evt);
+            }
+        });
+        menuRental.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRentalActionPerformed(evt);
+            }
+        });
+        menuBarMain.add(menuRental);
+
+        setJMenuBar(menuBarMain);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void menuRentalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRentalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuRentalActionPerformed
+
+    private void menuGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuGameActionPerformed
+
+    private void menuUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuUserActionPerformed
+
+    private void menuMainMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuMainMouseClicked
+        // TODO add your handling code here:
+
+        java.awt.CardLayout cl = (java.awt.CardLayout) mainPanel.getLayout();
+        cl.show(mainPanel, "Inicio");
+    }//GEN-LAST:event_menuMainMouseClicked
+
+    private void menuUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUserMouseClicked
+        // TODO add your handling code here:
+        java.awt.CardLayout cl = (java.awt.CardLayout) mainPanel.getLayout();
+        cl.show(mainPanel, "Users");
+    }//GEN-LAST:event_menuUserMouseClicked
+
+    private void menuGameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuGameMouseClicked
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        java.awt.CardLayout cl = (java.awt.CardLayout) mainPanel.getLayout();
+        cl.show(mainPanel, "Games");
+    }//GEN-LAST:event_menuGameMouseClicked
+
+    private void menuRentalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuRentalMouseClicked
+        // TODO add your handling code here:
+        java.awt.CardLayout cl = (java.awt.CardLayout) mainPanel.getLayout();
+        cl.show(mainPanel, "Rentals");
+    }//GEN-LAST:event_menuRentalMouseClicked
 
     /**
      * @param args the command line arguments
@@ -78,5 +204,11 @@ public class MainView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JMenuBar menuBarMain;
+    private javax.swing.JMenu menuGame;
+    private javax.swing.JMenu menuMain;
+    private javax.swing.JMenu menuRental;
+    private javax.swing.JMenu menuUser;
     // End of variables declaration//GEN-END:variables
 }
