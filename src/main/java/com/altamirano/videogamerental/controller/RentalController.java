@@ -9,6 +9,7 @@ import com.altamirano.videogamerental.model.Game;
 import com.altamirano.videogamerental.model.Platform;
 import com.altamirano.videogamerental.model.PlatformStock;
 import com.altamirano.videogamerental.model.Rental;
+import com.altamirano.videogamerental.model.RentalStatus;
 import com.altamirano.videogamerental.model.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,4 +120,83 @@ public class RentalController {
     public List<Rental> getRentals() {
         return List.copyOf(rentals);
     }
+
+    /**
+     * Metodo para devolver un juego
+     */
+    public void returnRental(Rental rental) throws ValidationException {
+
+        /**
+         * Comprobamos que exista el alquiler antes de regresarlo
+         *
+         */
+        if (!rentals.contains(rental)) {
+            throw new ValidationException("El alquiler no existe");
+
+        }
+
+        /**
+         * Comprobamos si esta activo o regresado
+         */
+        if (rental.getStatus() != RentalStatus.ACTIVE) {
+            throw new ValidationException("El alquiler ya ha sido devuelto");
+        }
+
+        /**
+         * Buscamos la plataforma y el stock del juego regresado
+         */
+        PlatformStock selectedStock = null;
+
+        for (PlatformStock platformStock : rental.getGame().getPlatforms()) {
+            if (platformStock.getPlatform().equals(rental.getPlatform())) {
+
+                selectedStock = platformStock;
+                break;
+            }
+        }
+
+        /**
+         * Condicional en caso de no encontrar la plataforma
+         */
+        if (selectedStock == null) {
+            throw new ValidationException("No se ha encontrado la plataforma del alquiler");
+        }
+
+        rental.markAsReturned();
+        selectedStock.setStock(selectedStock.getStock() + 1);
+    }
+
+    /**
+     * Buscamos un usuario que tenga algun alquier activo Solo queremos saber si
+     * tiene(true) o no(false), por eso usamos un Boolean
+     */
+    public boolean hasActiveRentalForUser(User user) {
+        boolean active = false;
+
+        for (Rental rental : rentals) {
+            if (rental.getUser().equals(user) && rental.getStatus() == RentalStatus.ACTIVE) {
+                active = true;
+                break;
+            }
+        }
+
+        return active;
+    }
+
+    /**
+     * Buscamos un juego que este alquilado, solo queremos saber si esta(true) o
+     * no(false)
+     */
+    public boolean hasActiveRentalForGame(Game game) {
+        boolean active = false;
+
+        for (Rental rental : rentals) {
+            if (rental.getGame().equals(game) && rental.getStatus() == RentalStatus.ACTIVE) {
+                active = true;
+                break;
+            }
+        }
+        return active;
+    }
+
 }

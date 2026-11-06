@@ -76,5 +76,19 @@ public class Rental {
         return status;
     }
 
-    
+    /**
+     * Verificaremos si esta alquilado o no, en caso de que no, pasa el estado a
+     * Retornado
+     *
+     * @throws ValidationException
+     */
+    public void markAsReturned() throws ValidationException {
+
+        if (status != RentalStatus.ACTIVE) {
+            throw new ValidationException("El alquiler ya ha sido devuelto");
+        }
+
+        this.status = RentalStatus.RETURNED;
+    }
+
 }
