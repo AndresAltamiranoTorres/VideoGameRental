@@ -73,7 +73,7 @@ public class User {
         return phone;
     }
 
-    public LocalDate getDateRegistrer() {
+    public LocalDate getDateRegister() {
         return dateRegistrer;
     }
 

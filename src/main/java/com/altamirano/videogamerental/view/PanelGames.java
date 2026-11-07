@@ -4,6 +4,13 @@
  */
 package com.altamirano.videogamerental.view;
 
+import com.altamirano.videogamerental.controller.GameController;
+import com.altamirano.videogamerental.controller.RentalController;
+import com.altamirano.videogamerental.exception.ValidationException;
+import com.altamirano.videogamerental.model.Game;
+import com.altamirano.videogamerental.model.PlatformStock;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Andrés
@@ -13,8 +20,56 @@ public class PanelGames extends javax.swing.JPanel {
     /**
      * Creates new form PanelGames
      */
-    public PanelGames() {
+    private GameController gameController;
+    private RentalController rentalController;
+
+    public PanelGames(GameController gameController, RentalController rentalController) {
         initComponents();
+
+        this.gameController = gameController;
+        this.rentalController = rentalController;
+        cargarGames();
+    }
+
+    /**
+     * Creamos metodo para cargar la lista de juegos en la tabla
+     */
+    public void cargarGames() {
+        /**
+         * Primero obtenemos el modelo de la tabla, que se encarga de gestionar
+         * las filas y columnas
+         */
+
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tableGames.getModel();
+
+        /**
+         * Limpiamos la tabla para evitar duplicados para cuando se actualice
+         */
+        model.setRowCount(0);
+
+        /**
+         * Creamos doble For-Each uno para obtener la lista los juegos. El
+         * segundo para obteners los datos de Stock. !RECORDEMOS! que cada juego
+         * puede tener varias versiones y diferente stock
+         */
+        for (Game game : gameController.getGames()) {
+
+            for (PlatformStock stock : game.getPlatforms()) {
+
+                /**
+                 * Añadimos los datos en la tabla con add.Row()
+                 */
+                model.addRow(new Object[]{
+                    game.getNumberId(),
+                    game.getName(),
+                    game.getGenre(),
+                    stock.getPlatform(),
+                    stock.getStock()
+                });
+            }
+
+        }
+
     }
 
     /**
@@ -26,7 +81,6 @@ public class PanelGames extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableGames = new javax.swing.JTable();
         panelButtons = new javax.swing.JPanel();
@@ -35,57 +89,175 @@ public class PanelGames extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("Games");
-        add(jLabel1, java.awt.BorderLayout.PAGE_START);
-
         tableGames.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Name", "Genre", "Platform"
+                "Nº Registre", "Name", "Genre", "Platform", "Stock"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableGames.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableGames.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tableGames);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        panelButtons.setPreferredSize(new java.awt.Dimension(746, 64));
+
         buttonAdd.setText("Añadir");
+        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddActionPerformed(evt);
+            }
+        });
 
         buttonDeleted.setText("Eliminar");
+        buttonDeleted.setMaximumSize(new java.awt.Dimension(72, 23));
+        buttonDeleted.setMinimumSize(new java.awt.Dimension(72, 23));
+        buttonDeleted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDeletedActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelButtonsLayout = new javax.swing.GroupLayout(panelButtons);
         panelButtons.setLayout(panelButtonsLayout);
         panelButtonsLayout.setHorizontalGroup(
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(buttonDeleted, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(438, Short.MAX_VALUE))
+                .addContainerGap(154, Short.MAX_VALUE)
+                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonDeleted, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelButtonsLayout.setVerticalGroup(
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(buttonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                     .addComponent(buttonDeleted, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         add(panelButtons, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
+        // TODO add your handling code here:
+
+        /**
+         * Creamos el JDialog de NewGame enviando el controllador
+         */
+        DialogNewGame dialog = new DialogNewGame(
+                (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this),
+                true,
+                gameController
+        );
+
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+
+        // Cargamos la lista de nuevo una vez creada un nuevo usuario
+        cargarGames();
+    }//GEN-LAST:event_buttonAddActionPerformed
+
+    private void buttonDeletedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeletedActionPerformed
+        // TODO add your handling code here:
+
+        // Comprovamos si hay una fila selecionada 
+        int fila = tableGames.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Seleccione un usuario para eliminar"
+            );
+            return;
+        }
+
+        /**
+         * Ontenemos el numero de registro del juego que queremos eliminar.
+         */
+        int filaModelo = tableGames.convertRowIndexToModel(fila);
+        int numberId = (int) tableGames.getModel().getValueAt(filaModelo, 0);
+
+        /**
+         * Vamos a obtener el juego exacto.
+         */
+        Game game = null;
+
+        for (Game g : gameController.getGames()) {
+            if (g.getNumberId() == numberId) {
+                game = g;
+                break;
+            }
+        }
+
+        // Confirmar eliminación
+        int respuesta = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de que desea eliminar el juego "
+                + game.getName() + "?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        //Try-Catch para validar los datos que se quieren eliminar.
+        try {
+            //Comprobamos si el juego esta alquilado
+            if (rentalController.hasActiveRentalForGame(game)) {
+                throw new ValidationException(
+                        "No se puede eliminar: el juego tiene alquileres activos"
+                );
+            }
+
+            //Eliminamos el juego
+            gameController.deleteGame(game);
+
+            // Actualizar tabla
+            cargarGames();
+
+            //Enseñamos dialogo que se ha eliminado correctamente
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Juego eliminado correctamente"
+            );
+
+        } catch (ValidationException e) {
+
+            //Enseñamos un panel con el error
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+        }
+    }//GEN-LAST:event_buttonDeletedActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAdd;
     private javax.swing.JButton buttonDeleted;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelButtons;
     private javax.swing.JTable tableGames;

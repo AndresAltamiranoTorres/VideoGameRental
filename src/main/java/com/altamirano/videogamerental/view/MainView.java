@@ -4,6 +4,18 @@
  */
 package com.altamirano.videogamerental.view;
 
+import com.altamirano.videogamerental.controller.GameController;
+import com.altamirano.videogamerental.controller.RentalController;
+import com.altamirano.videogamerental.controller.UserController;
+import com.altamirano.videogamerental.exception.ValidationException;
+import com.altamirano.videogamerental.model.Game;
+import com.altamirano.videogamerental.model.Genre;
+import com.altamirano.videogamerental.model.Platform;
+import com.altamirano.videogamerental.model.PlatformStock;
+import com.altamirano.videogamerental.model.User;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Andrés
@@ -13,19 +25,29 @@ public class MainView extends javax.swing.JFrame {
     /**
      * Creates new form MainView
      */
-    public MainView() {
+    /**
+     * Iniciamos los atributos de los controladores
+     */
+    private UserController userController;
+    private GameController gameController;
+    private RentalController rentalController;
+
+    public MainView() throws ValidationException {
         initComponents();
 
         setSize(1000, 650);
         setLocationRelativeTo(null);
 
+        //Iniciamos los datos principales
+        cargarDatosIniciales();
+
         /**
          * Iniciamos los paneles de Inicio,Juegos,User y Alquileres
          */
         PanelInicio panelInicio = new PanelInicio();
-        PanelGames panelGames = new PanelGames();
-        PanelUsers panelUsers = new PanelUsers();
-        PanelRentals panelRentals = new PanelRentals();
+        PanelGames panelGames = new PanelGames(gameController, rentalController);
+        PanelUsers panelUsers = new PanelUsers(userController, rentalController);
+        PanelRentals panelRentals = new PanelRentals(rentalController);
 
         /**
          * Añadimos las pantallas al mainPanel con sus identificadores
@@ -42,6 +64,58 @@ public class MainView extends javax.swing.JFrame {
          */
         java.awt.CardLayout c1 = (java.awt.CardLayout) mainPanel.getLayout();
         c1.show(mainPanel, "Inicio");
+
+    }
+
+    /**
+     * Creamos metodo para iniciar usuarios por defecto
+     */
+    private void cargarDatosIniciales() throws ValidationException {
+
+        userController = new UserController();
+        gameController = new GameController();
+
+        rentalController = new RentalController(
+                userController,
+                gameController
+        );
+
+        // Usuarios
+        userController.newUser(
+                "Andres", "Altamirano", "Torres",
+                "12345678A", "600123456"
+        );
+
+        userController.newUser(
+                "Laura", "Garcia", "Lopez",
+                "87654321B", "600987654"
+        );
+
+        // Juego 1
+        List<PlatformStock> platforms1 = new ArrayList<>();
+
+        platforms1.add(new PlatformStock(Platform.PS5, 5));
+        platforms1.add(new PlatformStock(Platform.PC, 3));
+
+        gameController.newGame("Cyberpunk 2077", Genre.RPG, platforms1);
+
+        // Juego 2
+        List<PlatformStock> platforms2 = new ArrayList<>();
+
+        platforms2.add(new PlatformStock(Platform.XBOX, 4));
+        platforms2.add(new PlatformStock(Platform.SWITCH_2, 2));
+
+        gameController.newGame("Minecraft", Genre.ADVENTURE, platforms2);
+
+        // Creamos 2 Alquileres
+        User user1 = userController.getUsers().get(0);
+        User user2 = userController.getUsers().get(1);
+
+        Game game1 = gameController.getGames().get(0);
+        Game game2 = gameController.getGames().get(1);
+
+        rentalController.newRental(user1, game1, Platform.PS5);
+        rentalController.newRental(user2, game2, Platform.XBOX);
 
     }
 
@@ -198,7 +272,12 @@ public class MainView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainView().setVisible(true);
+                try {
+                    new MainView().setVisible(true);
+                } catch (ValidationException e) {
+
+                }
+
             }
         });
     }

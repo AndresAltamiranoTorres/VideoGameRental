@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class Game {
 
+    private int numberId;
+    private static int nextId = 1;
     private String name;
     private Genre genre;
     private List<PlatformStock> platforms;
@@ -34,6 +36,7 @@ public class Game {
         this.name = name;
         this.genre = genre;
         this.platforms = List.copyOf(platforms);
+        this.numberId = nextId++;
     }
 
     /**
@@ -49,6 +52,10 @@ public class Game {
 
     public List<PlatformStock> getPlatforms() {
         return List.copyOf(platforms);
+    }
+
+    public int getNumberId() {
+        return numberId;
     }
 
 }

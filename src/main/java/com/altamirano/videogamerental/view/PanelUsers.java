@@ -4,6 +4,12 @@
  */
 package com.altamirano.videogamerental.view;
 
+import com.altamirano.videogamerental.controller.RentalController;
+import com.altamirano.videogamerental.controller.UserController;
+import com.altamirano.videogamerental.exception.ValidationException;
+import com.altamirano.videogamerental.model.User;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Andrés
@@ -13,8 +19,46 @@ public class PanelUsers extends javax.swing.JPanel {
     /**
      * Creates new form PanelUsers
      */
-    public PanelUsers() {
+    private UserController userController;
+    private RentalController rentalController;
+
+    public PanelUsers(UserController userController, RentalController rentalController) {
         initComponents();
+
+        this.userController = userController;
+        this.rentalController = rentalController;
+        cargarUsuarios();
+    }
+
+    /**
+     * Creamos Metodo para Cargar los usuarios en la tabla
+     */
+    private void cargarUsuarios() {
+        /**
+         * Primero obtenemos el modelo de la tabla, que se encarga de gestionar
+         * las filas y columnas
+         */
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tableUsers.getModel();
+
+        /**
+         * Limpiamos la tabla para evitar duplicados para cuando se actualice
+         */
+        model.setRowCount(0);
+
+        /**
+         * Creamos For-Each para que nos saque los datos de cada usuarios
+         */
+        for (User user : userController.getUsers()) {
+
+            model.addRow(new Object[]{
+                user.getName(),
+                user.getLastname(),
+                user.getSurname(),
+                user.getDni(),
+                user.getPhone(),
+                user.getDateRegister()
+            });
+        }
     }
 
     /**
@@ -26,7 +70,6 @@ public class PanelUsers extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableUsers = new javax.swing.JTable();
         panelButtons = new javax.swing.JPanel();
@@ -34,9 +77,6 @@ public class PanelUsers extends javax.swing.JPanel {
         buttonDeleted = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
-
-        jLabel1.setText("Users");
-        add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
         tableUsers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -48,7 +88,17 @@ public class PanelUsers extends javax.swing.JPanel {
             new String [] {
                 "Name", "Lastname", "Surname", "DNI", "Phone", "Fecha Registro"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tableUsers);
         if (tableUsers.getColumnModel().getColumnCount() > 0) {
             tableUsers.getColumnModel().getColumn(0).setHeaderValue("Name");
@@ -62,37 +112,137 @@ public class PanelUsers extends javax.swing.JPanel {
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         buttonAdd.setText("Añadir");
+        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddActionPerformed(evt);
+            }
+        });
 
         buttonDeleted.setText("Eliminar");
+        buttonDeleted.setMaximumSize(new java.awt.Dimension(72, 23));
+        buttonDeleted.setMinimumSize(new java.awt.Dimension(72, 23));
+        buttonDeleted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDeletedActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelButtonsLayout = new javax.swing.GroupLayout(panelButtons);
         panelButtons.setLayout(panelButtonsLayout);
         panelButtonsLayout.setHorizontalGroup(
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
-                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(buttonDeleted, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 403, Short.MAX_VALUE))
+                .addContainerGap(392, Short.MAX_VALUE)
+                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(buttonDeleted, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelButtonsLayout.setVerticalGroup(
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                    .addComponent(buttonDeleted, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonDeleted, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         add(panelButtons, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
+        // TODO add your handling code here:
+
+        /**
+         * Creamos el JDialog de NewUsuario enviando el controllador
+         */
+        DialogNewUser dialog = new DialogNewUser(
+                (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this),
+                true,
+                userController
+        );
+
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+
+        // Cargamos la lista de nuevo una vez creada un nuevo usuario
+        cargarUsuarios();
+    }//GEN-LAST:event_buttonAddActionPerformed
+
+    private void buttonDeletedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeletedActionPerformed
+        // TODO add your handling code here:
+
+        // Comprovamos si hay una fila selecionada 
+        int fila = tableUsers.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Seleccione un usuario para eliminar"
+            );
+            return;
+        }
+
+        // Obtenemos el usuario seleccionado
+        int filaModelo = tableUsers.convertRowIndexToModel(fila);
+
+        //IMPORTANTE AQUI OBTENEMOS EL USUARIO REAL !!
+        User user = userController.getUsers().get(filaModelo);
+
+        /**
+         * Confirmamos la eliminacion
+         */
+        // Confirmar eliminación
+        int respuesta = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de que desea eliminar a "
+                + user.getName() + " " + user.getLastname() + "?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Usamos Try-Catch porque vamos a validar 
+        try {
+            // Comprobar si tiene alquileres activos
+            if (rentalController.hasActiveRentalForUser(user)) {
+                throw new ValidationException(
+                        "No se puede eliminar: el usuario tiene alquileres activos"
+                );
+            }
+
+            // Eliminar usuario
+            userController.deleteUser(user);
+
+            // Actualizar tabla
+            cargarUsuarios();
+
+            //Enseñamos dialogo que se ha eliminado correctamente
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Usuario eliminado correctamente"
+            );
+
+        } catch (ValidationException e) {
+
+            //Enseñamos un panel con el error
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_buttonDeletedActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAdd;
     private javax.swing.JButton buttonDeleted;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelButtons;
     private javax.swing.JTable tableUsers;

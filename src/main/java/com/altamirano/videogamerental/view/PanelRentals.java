@@ -4,6 +4,9 @@
  */
 package com.altamirano.videogamerental.view;
 
+import com.altamirano.videogamerental.controller.RentalController;
+import com.altamirano.videogamerental.model.Rental;
+
 /**
  *
  * @author Andrés
@@ -13,8 +16,50 @@ public class PanelRentals extends javax.swing.JPanel {
     /**
      * Creates new form PanelRentals
      */
-    public PanelRentals() {
+    private RentalController rentalController;
+
+    public PanelRentals(RentalController rentalController) {
         initComponents();
+
+        this.rentalController = rentalController;
+        cargarRentals();
+    }
+
+    /**
+     * Creamos Metodo para cargar los alquileres
+     */
+    public void cargarRentals() {
+        /**
+         * Primero obtenemos el modelo de la tabla, que se encarga de gestionar
+         * las filas y columnas
+         */
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tableRentals.getModel();
+
+        /**
+         * Limpiamos la tabla para evitar duplicados para cuando se actualice
+         */
+        model.setRowCount(0);
+
+        /**
+         * Creamos For-Each para que nos saque los datos de cada Rental
+         */
+        for (Rental rental : rentalController.getRentals()) {
+
+            /**
+             * Añadimos los datos a la tabla con model.addRow()
+             */
+            model.addRow(new Object[]{
+                rental.getNumberId(),
+                rental.getUser().getName() + " " + rental.getUser().getLastname(),
+                rental.getGame().getName(),
+                rental.getPlatform(),
+                rental.getDateStart(),
+                rental.getDateEnd(),
+                rental.getStatus()
+            });
+
+        }
+
     }
 
     /**
@@ -26,17 +71,14 @@ public class PanelRentals extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableRentals = new javax.swing.JTable();
         panelButtons = new javax.swing.JPanel();
         buttonAdd = new javax.swing.JButton();
         buttonDeleted = new javax.swing.JButton();
 
+        setToolTipText("Rentals");
         setLayout(new java.awt.BorderLayout());
-
-        jLabel1.setText("Rentals");
-        add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
         tableRentals.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -48,43 +90,65 @@ public class PanelRentals extends javax.swing.JPanel {
             new String [] {
                 "Nº Register", "User", "Game", "Platform", "Date Start", "Date End", "Status"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableRentals.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableRentals.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tableRentals);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        panelButtons.setToolTipText("Rentals");
+        panelButtons.setPreferredSize(new java.awt.Dimension(746, 64));
+
         buttonAdd.setText("Añadir");
 
         buttonDeleted.setText("Borrar");
+        buttonDeleted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDeletedActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelButtonsLayout = new javax.swing.GroupLayout(panelButtons);
         panelButtons.setLayout(panelButtonsLayout);
         panelButtonsLayout.setHorizontalGroup(
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
-                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(buttonDeleted, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 437, Short.MAX_VALUE))
+                .addContainerGap(231, Short.MAX_VALUE)
+                .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(buttonDeleted, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelButtonsLayout.setVerticalGroup(
             panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                    .addComponent(buttonDeleted, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(panelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonDeleted, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         add(panelButtons, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void buttonDeletedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeletedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonDeletedActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAdd;
     private javax.swing.JButton buttonDeleted;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelButtons;
     private javax.swing.JTable tableRentals;
