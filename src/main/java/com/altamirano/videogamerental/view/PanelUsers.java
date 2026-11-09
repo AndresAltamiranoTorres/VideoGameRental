@@ -33,7 +33,7 @@ public class PanelUsers extends javax.swing.JPanel {
     /**
      * Creamos Metodo para Cargar los usuarios en la tabla
      */
-    private void cargarUsuarios() {
+    public void cargarUsuarios() {
         /**
          * Primero obtenemos el modelo de la tabla, que se encarga de gestionar
          * las filas y columnas

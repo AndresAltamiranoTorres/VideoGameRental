@@ -57,5 +57,10 @@ public class Game {
     public int getNumberId() {
         return numberId;
     }
+    
+    @Override
+    public String toString() {
+        return name;
+    }
 
 }

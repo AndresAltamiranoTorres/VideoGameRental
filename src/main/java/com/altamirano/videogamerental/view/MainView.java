@@ -32,6 +32,15 @@ public class MainView extends javax.swing.JFrame {
     private GameController gameController;
     private RentalController rentalController;
 
+    /**
+     * Creamos los paneles como Atributos para todos los datos se actualicen
+     * entre si
+     */
+    private PanelInicio panelInicio;
+    private PanelGames panelGames;
+    private PanelUsers panelUsers;
+    private PanelRentals panelRentals;
+
     public MainView() throws ValidationException {
         initComponents();
 
@@ -44,10 +53,10 @@ public class MainView extends javax.swing.JFrame {
         /**
          * Iniciamos los paneles de Inicio,Juegos,User y Alquileres
          */
-        PanelInicio panelInicio = new PanelInicio();
-        PanelGames panelGames = new PanelGames(gameController, rentalController);
-        PanelUsers panelUsers = new PanelUsers(userController, rentalController);
-        PanelRentals panelRentals = new PanelRentals(rentalController);
+        panelInicio = new PanelInicio();
+        panelGames = new PanelGames(gameController, rentalController);
+        panelUsers = new PanelUsers(userController, rentalController);
+        panelRentals = new PanelRentals(rentalController, userController, gameController, this);
 
         /**
          * Añadimos las pantallas al mainPanel con sus identificadores
@@ -64,6 +73,16 @@ public class MainView extends javax.swing.JFrame {
          */
         java.awt.CardLayout c1 = (java.awt.CardLayout) mainPanel.getLayout();
         c1.show(mainPanel, "Inicio");
+
+    }
+
+    public void actualizarPantallas() {
+
+        panelUsers.cargarUsuarios();
+
+        panelGames.cargarGames();
+
+        panelRentals.cargarRentals();
 
     }
 

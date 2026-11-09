@@ -82,6 +82,12 @@ public class DialogNewGame extends javax.swing.JDialog {
 
         jLabel2.setText("Genre * :");
 
+        comboBoxGenre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxGenreActionPerformed(evt);
+            }
+        });
+
         secondPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Plataforma Disponibles"));
 
         checkBoxPs5.setText("PS5");
@@ -324,6 +330,10 @@ public class DialogNewGame extends javax.swing.JDialog {
             );
         }
     }//GEN-LAST:event_buttonAddActionPerformed
+
+    private void comboBoxGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxGenreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxGenreActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

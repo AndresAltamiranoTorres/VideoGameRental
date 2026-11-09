@@ -76,6 +76,10 @@ public class Rental {
         return status;
     }
 
+    public static int getNextId() {
+        return nextId;
+    }
+
     /**
      * Verificaremos si esta alquilado o no, en caso de que no, pasa el estado a
      * Retornado

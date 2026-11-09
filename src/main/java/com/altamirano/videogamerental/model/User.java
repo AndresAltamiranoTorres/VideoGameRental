@@ -37,11 +37,11 @@ public class User {
         if (dni == null || dni.isBlank()) {
             throw new ValidationException("El DNI es obligatorio");
         }
-        
-        if(phone == null || phone.isBlank()){
+
+        if (phone == null || phone.isBlank()) {
             throw new ValidationException("El Telefono es obligatorio");
         }
-        
+
         this.name = name;
         this.lastname = lastname;
         this.surname = surname;
@@ -75,6 +75,11 @@ public class User {
 
     public LocalDate getDateRegister() {
         return dateRegistrer;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + lastname + " " + surname;
     }
 
 }
