@@ -4,17 +4,72 @@
  */
 package com.altamirano.videogamerental.view;
 
+import com.altamirano.videogamerental.controller.GameController;
+import com.altamirano.videogamerental.controller.RentalController;
+import com.altamirano.videogamerental.controller.UserController;
+import com.altamirano.videogamerental.model.Rental;
+import com.altamirano.videogamerental.model.RentalStatus;
+
 /**
  *
  * @author Andrés
+ *
  */
 public class PanelInicio extends javax.swing.JPanel {
+
+    private UserController userController;
+    private GameController gameController;
+    private RentalController rentalController;
 
     /**
      * Creates new form PanelInicio
      */
-    public PanelInicio() {
+    public PanelInicio(UserController userController,
+            GameController gameController,
+            RentalController rentalController) {
+
         initComponents();
+
+        this.userController = userController;
+        this.gameController = gameController;
+        this.rentalController = rentalController;
+
+        actualizarContadores();
+    }
+
+    /**
+     * Metodo para actualizar la cantidad de usuarios, juegos y alquileres
+     */
+    public void actualizarContadores() {
+
+        // Total de usuarios
+        int totalUsuarios = userController.getUsers().size();
+
+        // Total de juegos
+        int totalJuegos = gameController.getGames().size();
+
+        // Total de alquileres activos/retornados
+        int totalAlquileresActivos = 0;
+        int totalAlquileresReturn = 0;
+
+        for (Rental rental : rentalController.getRentals()) {
+
+            if (rental.getStatus() == RentalStatus.ACTIVE) {
+                totalAlquileresActivos++;
+            }
+        }
+
+        for (Rental rental : rentalController.getRentals()) {
+            if (rental.getStatus() == RentalStatus.RETURNED) {
+                totalAlquileresReturn++;
+            }
+        }
+
+        // Mostramos los resultados
+        countUser.setText(String.valueOf(totalUsuarios));
+        countGame.setText(String.valueOf(totalJuegos));
+        countActive.setText(String.valueOf(totalAlquileresActivos));
+        countReturn.setText(String.valueOf(totalAlquileresReturn));
     }
 
     /**
@@ -29,24 +84,32 @@ public class PanelInicio extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         panelUsers = new javax.swing.JPanel();
-        labelUser = new javax.swing.JLabel();
         labelTotalUsuarios = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        countUser = new javax.swing.JLabel();
         panelGames = new javax.swing.JPanel();
-        labelGames = new javax.swing.JLabel();
         labelTotalGames = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        countGame = new javax.swing.JLabel();
         panelRentals = new javax.swing.JPanel();
-        labelRentals = new javax.swing.JLabel();
         labelTotalRentals = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        countActive = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        countReturn = new javax.swing.JLabel();
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Bienvenido");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        jLabel1.setText("BIENVENIDO");
 
-        jLabel2.setText("Consultar alquileres y su estados");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("Consulta alquileres y su estados");
 
-        panelUsers.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        panelUsers.setBorder(javax.swing.BorderFactory.createTitledBorder("Users"));
 
-        labelUser.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        labelUser.setText("Usuarios");
+        jLabel3.setText("Total registrados");
+
+        countUser.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        countUser.setText("jLabel6");
 
         javax.swing.GroupLayout panelUsersLayout = new javax.swing.GroupLayout(panelUsers);
         panelUsers.setLayout(panelUsersLayout);
@@ -55,24 +118,34 @@ public class PanelInicio extends javax.swing.JPanel {
             .addGroup(panelUsersLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelUser)
-                    .addComponent(labelTotalUsuarios))
-                .addContainerGap(106, Short.MAX_VALUE))
+                    .addGroup(panelUsersLayout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addComponent(labelTotalUsuarios))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(countUser, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelUsersLayout.setVerticalGroup(
             panelUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelUsersLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelUser)
-                .addGap(18, 18, 18)
-                .addComponent(labelTotalUsuarios)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addGroup(panelUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelUsersLayout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(labelTotalUsuarios))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelUsersLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(countUser)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        panelGames.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelGames.setBorder(javax.swing.BorderFactory.createTitledBorder("Games"));
 
-        labelGames.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        labelGames.setText("Juegos");
+        jLabel4.setText("Total registrados");
+
+        countGame.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        countGame.setText("jLabel6");
 
         javax.swing.GroupLayout panelGamesLayout = new javax.swing.GroupLayout(panelGames);
         panelGames.setLayout(panelGamesLayout);
@@ -81,24 +154,38 @@ public class PanelInicio extends javax.swing.JPanel {
             .addGroup(panelGamesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelGamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelGames)
-                    .addComponent(labelTotalGames))
-                .addContainerGap(115, Short.MAX_VALUE))
+                    .addGroup(panelGamesLayout.createSequentialGroup()
+                        .addGap(112, 112, 112)
+                        .addComponent(labelTotalGames))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(countGame, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelGamesLayout.setVerticalGroup(
             panelGamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelGamesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelGames)
+                .addGap(25, 25, 25)
+                .addComponent(countGame, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelTotalGames)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        panelRentals.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelRentals.setBorder(javax.swing.BorderFactory.createTitledBorder("Rentals"));
 
-        labelRentals.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        labelRentals.setText("Alquileres");
+        jLabel5.setText("Alquileres Activos");
+
+        countActive.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        countActive.setForeground(new java.awt.Color(0, 153, 0));
+        countActive.setText("jLabel6");
+
+        jLabel6.setText("Alquileres devueltos");
+
+        countReturn.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        countReturn.setForeground(new java.awt.Color(255, 51, 51));
+        countReturn.setText("jLabel7");
 
         javax.swing.GroupLayout panelRentalsLayout = new javax.swing.GroupLayout(panelRentals);
         panelRentals.setLayout(panelRentalsLayout);
@@ -107,18 +194,33 @@ public class PanelInicio extends javax.swing.JPanel {
             .addGroup(panelRentalsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelRentals)
-                    .addComponent(labelTotalRentals))
-                .addContainerGap(101, Short.MAX_VALUE))
+                    .addGroup(panelRentalsLayout.createSequentialGroup()
+                        .addGap(119, 119, 119)
+                        .addComponent(labelTotalRentals))
+                    .addGroup(panelRentalsLayout.createSequentialGroup()
+                        .addComponent(countActive, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(116, 116, 116)
+                        .addComponent(countReturn, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelRentalsLayout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(79, 79, 79)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(235, Short.MAX_VALUE))
         );
         panelRentalsLayout.setVerticalGroup(
             panelRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRentalsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelRentals)
+                .addGap(9, 9, 9)
+                .addGroup(panelRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelRentalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(countActive)
+                    .addComponent(countReturn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelTotalRentals)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -126,45 +228,58 @@ public class PanelInicio extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panelGames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panelRentals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panelUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(57, 57, 57))
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addComponent(panelGames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(panelRentals, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel2))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelGames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addGap(47, 47, 47)
-                        .addComponent(panelUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(panelRentals, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(panelUsers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelGames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelRentals, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel countActive;
+    private javax.swing.JLabel countGame;
+    private javax.swing.JLabel countReturn;
+    private javax.swing.JLabel countUser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel labelGames;
-    private javax.swing.JLabel labelRentals;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel labelTotalGames;
     private javax.swing.JLabel labelTotalRentals;
     private javax.swing.JLabel labelTotalUsuarios;
-    private javax.swing.JLabel labelUser;
     private javax.swing.JPanel panelGames;
     private javax.swing.JPanel panelRentals;
     private javax.swing.JPanel panelUsers;

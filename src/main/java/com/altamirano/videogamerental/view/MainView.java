@@ -53,7 +53,7 @@ public class MainView extends javax.swing.JFrame {
         /**
          * Iniciamos los paneles de Inicio,Juegos,User y Alquileres
          */
-        panelInicio = new PanelInicio();
+        panelInicio = new PanelInicio(userController, gameController, rentalController);
         panelGames = new PanelGames(gameController, rentalController);
         panelUsers = new PanelUsers(userController, rentalController);
         panelRentals = new PanelRentals(rentalController, userController, gameController, this);
@@ -79,10 +79,9 @@ public class MainView extends javax.swing.JFrame {
     public void actualizarPantallas() {
 
         panelUsers.cargarUsuarios();
-
         panelGames.cargarGames();
-
         panelRentals.cargarRentals();
+        panelInicio.actualizarContadores();
 
     }
 
